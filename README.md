@@ -44,6 +44,9 @@ Battleship/
 │   ├── ReadWriteQueue/
 │   ├── Ship/
 │   └── RandomShips/
+│   ├── Utils/
+│   ├── Commands/
+
 ├── CMakeLists.txt
 └── README.md
 ```
