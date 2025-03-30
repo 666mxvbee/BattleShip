@@ -39,6 +39,7 @@ void saveSettingsToFile(const std::string& filename, const Settings& settings) {
 }
 
 void initGameDataFilesForMaster() {
+    resetGameDataDirectory("../game_data");
     {
         std::ofstream settingsFile("../game_data/settings.txt", std::ios::trunc);
         if (!settingsFile.is_open()) {
@@ -84,4 +85,15 @@ void initGameDataFilesForSlave() {
     }
     }
     std::cout << "Slave: game_data files initialized.\n";
+}
+
+void resetGameDataDirectory(const std::string& path) {
+    std::error_code ec;
+    std::filesystem::remove_all(path, ec);
+
+    if (!std::filesystem::create_directories(path, ec)) {
+        if (ec) {
+            std::cerr << "Error while creating directory " << path << ": " << ec.message() << "\n";
+        }
+    }
 }

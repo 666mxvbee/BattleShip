@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
-#include "../Settings/Settings.h"
+#include "Settings/Settings.h"
 
 void saveSettingsToFile(const std::string& filename, const Settings& settings);
 void initGameDataFilesForMaster();
 void initGameDataFilesForSlave();
+void resetGameDataDirectory(const std::string& path);
