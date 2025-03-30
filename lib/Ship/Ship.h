@@ -4,10 +4,10 @@
 
 class Ship {
 public:
-    int len; // len of the ship
-    char orientation; // 'h' / 'v'
-    uint64_t x; // X
-    uint64_t y; // Y
+    int len;
+    char orientation;
+    uint64_t x;
+    uint64_t y;
     std::vector<bool>hits;
 
     Ship(int length, char orient, uint64_t xcord, uint64_t ycord);

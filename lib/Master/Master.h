@@ -1,5 +1,5 @@
 #pragma once
-#include "../Settings/Settings.h"
+#include "Settings/Settings.h"
 #include <string>
 #include <sstream>
 
@@ -8,7 +8,7 @@ private:
     Settings& settings;
 
 public:
-    Master(Settings& s);
+    explicit Master(Settings& s);
 
     void setupShips();
 

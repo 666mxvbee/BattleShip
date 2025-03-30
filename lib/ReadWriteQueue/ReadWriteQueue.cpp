@@ -6,7 +6,7 @@ int ReadWriteQueue::readQueueFromFile(const std::string& filename) {
     std::ifstream in(filename);
     if (!in.is_open()) {
         std::cerr << "ReadWriteQueue: Unable to open " << filename << " for reading." << std::endl;
-        return -1; // Ошибка (подловил на ошибке)
+        return -1;
     }
     int player = -1;
     in >> player;

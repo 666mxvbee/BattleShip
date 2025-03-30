@@ -33,9 +33,7 @@ bool Ship::contains(uint64_t shotX, uint64_t shotY) const {
     if (orientation == 'h') {
         return (shotY == y && shotX >= x && shotX < x + len);
     }
-    else if (orientation == 'v') {
+    else {
         return (shotX == x && shotY >= y && shotY < y + len);
     }
-    // std::cout << "Ship::contains(): Invalid orientation " << orientation << std::endl;
-    return false;
 }

@@ -1,5 +1,5 @@
 #include "RandomShips.h"
-#include "../Ship/Ship.h"
+#include "Ship/Ship.h"
 #include <iostream>
 
 static bool isOverLaps(const Ship& existingShip, int newLen, char newOrient, uint64_t newX, uint64_t newY) {

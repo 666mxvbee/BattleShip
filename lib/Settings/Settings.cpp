@@ -237,7 +237,7 @@ void Settings::clearSlaveShips() {
 bool Settings::canFitShips() const {
     uint64_t totalShipCells = 0;
     for (const auto& [type, count] : shipCounts) {
-        totalShipCells += type * count;
+        totalShipCells += (type * count);
     }
     std::cout << "Settings::canFitShips(): totalShipCells=" << totalShipCells
               << " mapSize=" << (width*height) << std::endl;

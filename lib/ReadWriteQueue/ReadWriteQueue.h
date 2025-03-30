@@ -5,10 +5,9 @@
 
 class ReadWriteQueue {
 private:
-    std::mutex queue_mutex; // Для синхронизации доступа к файлам
+    std::mutex queue_mutex;
 
 public:
-    //(1 = Master, 2 = Slave)
     int readQueueFromFile(const std::string& fileName);
 
     void writeQueueToFile(const std::string& fileName, int player);

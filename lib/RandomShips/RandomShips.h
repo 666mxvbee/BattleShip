@@ -1,5 +1,5 @@
 #pragma once
-#include "../Settings/Settings.h"
+#include "Settings/Settings.h"
 #include <random>
 
 class RandomShips {
@@ -9,8 +9,7 @@ private:
     uint64_t height;
     std::mt19937 rng;
 
-public:
-
-    RandomShips(Settings& s);
+public: 
+    explicit RandomShips(Settings& s);
     void placeShips(const std::string& player);
 };

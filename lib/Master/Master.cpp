@@ -1,5 +1,5 @@
 #include "Master.h"
-#include "../RandomShips/RandomShips.h"
+#include "RandomShips/RandomShips.h"
 #include <fstream>
 #include <iostream>
 
@@ -33,22 +33,14 @@ void Master::processShotResult(const std::string& result, uint64_t x, uint64_t y
 }
 
 void Master::setupShips() {
-    // Размещаем корабли Master случайным образом
     RandomShips randomShips(settings);
-    try {
-        randomShips.placeShips("master");
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Master::setupShips(): Exception during ship placement: " << e.what() << std::endl;
-        throw; // Re-throw для обработки в main
-    }
+    randomShips.placeShips("master");
 
-    // Сохраняем корабли в файл master_ships.txt
     std::ofstream masterFile("../game_data/master_ships.txt", std::ios::trunc);
     if (!masterFile.is_open()) {
-        std::cerr << "Master: Unable to open master_ships.txt for writing." << std::endl;
         throw std::runtime_error("Master::setupShips(): Unable to open master_ships.txt for writing.");
     }
+
     const auto& ships = settings.getMasterShips();
     for (const auto& ship : ships) {
         masterFile << "ship_type=" << ship.len
@@ -71,7 +63,6 @@ bool Master::loadSlaveShips(const std::string& filename) {
 
     std::string line;
 
-    // Очистка текущего списка кораблей Slave
     settings.clearSlaveShips();
 
     while (std::getline(in, line)) {
@@ -99,8 +90,7 @@ bool Master::loadSlaveShips(const std::string& filename) {
             }
         }
 
-        Ship ship(ship_type, orientation, x, y);
-        settings.addSlaveShip(ship);
+        settings.addSlaveShip(Ship(ship_type, orientation, x, y));
 
     }
 
