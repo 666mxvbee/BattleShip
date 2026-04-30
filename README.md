@@ -1,37 +1,38 @@
 # Battleship (C++)
 
-**Описание:**  
-Этот проект — классическая игра «Морской бой» на C++, где два игрока (Master и Slave) взаимодействуют друг с другом с помощью служебных файлов. 
+**Description:**  
+This project is a classic Battleship game written in C++, where two players, Master and Slave, interact with each other through auxiliary files.
 
-- **Master** определяет размеры поля, количество кораблей и начинает игру.
-   
-- **Slave** автоматически считывает все настройки от Master.  
+- **Master** defines the field size, the number of ships, and starts the game.
 
-## Содержание
-1. [Особенности проекта](#особенности-проекта)
-2. [Структура проекта](#структура-проекта)
-3. [Сборка](#сборка)
-4. [Команды Master](#команды-master)
-5. [Команды Slave](#команды-slave)
-6. [Очередность ходов](#очередность-ходов)
-7. [Пример процесса игры](#пример-процесса-игры)
-8. [Служебные файлы](#служебные-файлы)
+- **Slave** automatically reads all settings from Master.
 
----
+## Contents
 
-## Особенности проекта
-
-- Игра расчитана на **два независимых терминала**, каждый исполняемый файл (`master_main.exe` и `slave_main.exe`) запускается отдельно.
-- **Master** задаёт настройки и видит только собственные корабли.  
-- **Slave** получает настройки автоматически и также видит только собственные корабли.  
-- **Чужие** корабли (противника) и их координаты **не** выводятся, чтобы исключить «читы».  
-- Логика ходов организована через файл `queue.txt`:  
-  - `1` означает ход Master  
-  - `2` означает ход Slave
+1. [Project Features](#project-features)
+2. [Project Structure](#project-structure)
+3. [Build](#build)
+4. [Master Commands](#master-commands)
+5. [Slave Commands](#slave-commands)
+6. [Turn Order](#turn-order)
+7. [Example Game Flow](#example-game-flow)
+8. [Auxiliary Files](#auxiliary-files)
 
 ---
 
-## Структура проекта
+## Project Features
+
+- The game is designed to run in **two independent terminals**. Each executable file (`master_main.exe` and `slave_main.exe`) is launched separately.
+- **Master** sets the game configuration and sees only their own ships.
+- **Slave** receives the configuration automatically and also sees only their own ships.
+- The opponent’s ships and their coordinates are **not** displayed in order to prevent cheating.
+- Turn logic is organized through the `queue.txt` file:
+  - `1` means it is Master’s turn
+  - `2` means it is Slave’s turn
+
+---
+
+## Project Structure
 
 ```bash
 Battleship/
@@ -47,83 +48,93 @@ Battleship/
 │   └── RandomShips/
 │   ├── Utils/
 │   ├── Commands/
-
 ├── CMakeLists.txt
 └── README.md
 ```
 
-- bin содержит исполняемые точки входа:
-  - master_main.cpp
-  - slave_main.cpp
+- `bin` contains the executable entry points:
+  - `master_main.cpp`
+  - `slave_main.cpp`
 
-- lib хранит логику игры (классы Master, Slave, Settings, RandomShips и т. д.).
+- `lib` contains the game logic, including the `Master`, `Slave`, `Settings`, `RandomShips`, and other classes.
 
-- CMakeLists.txt — скрипт для сборки через CMake.
+- `CMakeLists.txt` is the build script used by CMake.
 
-## Сборка
+## Build
 
-1. Убедитесь, что у вас установлен CMake (3.10+) и компилятор C++ (например, g++ или clang++).
+1. Make sure that CMake version 3.10+ and a C++ compiler, such as `g++` or `clang++`, are installed.
 
-2. В корне репозитория (папка Battleship/) выполните:
-   ```bash copycode
+2. From the repository root directory, `Battleship/`, run:
+
+   ```bash
    mkdir build
    cd build
    cmake ..
    cmake --build . --config Release
    ```
 
-3. После сборки в папке build/Release появятся файлы:
-- __master_main.exe___
-- ___slave_main.exe___
+3. After the build is complete, the following files will appear in the `build/Release` directory:
 
-## Команды Master
+- `master_main.exe`
+- `slave_main.exe`
 
-- set mode master
-- set width <N>
-- set height <N>
-- set count <type> <count> (например, set count 4 1 — добавить 1 корабль длины 4)
-- start — начинает игру, расставляет корабли Master и ждёт, пока Slave расставит свои.
-- shot X Y — совершить выстрел. Если промах, ход перейдёт к Slave; если попадание — ход останется у Master.
-- stop — остановить текущую игру.
-- exit — полностью выйти из приложения.
+## Master Commands
 
-### Пример использования:
-```bash copycode
+- `set mode master`
+- `set width <N>`
+- `set height <N>`
+- `set count <type> <count>`  
+  For example, `set count 4 1` adds one ship of length 4.
+- `start` — starts the game, places Master’s ships, and waits until Slave places their ships.
+- `shot X Y` — makes a shot. If the shot misses, the turn passes to Slave. If the shot hits, Master keeps the turn.
+- `stop` — stops the current game.
+- `exit` — exits the application completely.
+
+### Usage Example
+
+```bash
 Master: Enter commands (e.g. set mode master, set width 10, set height 10, set count 4 1, start):
 > set mode master
 > set width 10
 > set height 10
-> set count 1 4   # Четыре корабля длины 1
-> set count 2 2   # Два корабля длины 2
+> set count 1 4   # Four ships of length 1
+> set count 2 2   # Two ships of length 2
 > start
 ```
 
-## Команды Slave
-- shot X Y — сделать выстрел, если это ход Slave.
-- exit — выйти из игры.
-- ___Все прочие настройки (ширина, высота и т. д.) Slave не задаёт — они приходят автоматически от Master.___
+## Slave Commands
 
-## Очередность ходов
-- Хранится в файле queue.txt: 1 = Master, 2 = Slave.
-- Если игрок промахивается, ход переходит к противнику; если попал или потопил корабль, ход остаётся у него.
-- При смене очереди в терминале нового игрока появляется строка вида:
-   ```arduino copycode
+- `shot X Y` — makes a shot if it is Slave’s turn.
+- `exit` — exits the game.
+- **All other settings, such as width, height, and so on, are not set by Slave. They are received automatically from Master.**
+
+## Turn Order
+
+- The turn order is stored in the `queue.txt` file: `1` = Master, `2` = Slave.
+- If a player misses, the turn passes to the opponent. If a player hits or sinks a ship, they keep the turn.
+- When the turn changes, the new player’s terminal displays a message like:
+
+   ```arduino
    [Slave] Now it's your turn.
    ```
-   или
 
-   ```arduino copycode
+   or
+
+   ```arduino
    [Master] Now it's your turn.
    ```
 
-## Пример процесса игры 
-1. ___Slave запускается первым и сообщает:___
-   ```vbnet copycode
+## Example Game Flow
+
+1. **Slave is launched first and displays:**
+
+   ```vbnet
    Slave: Waiting for game to start...
    ```
 
-2. ___Master запускается вторым и задаёт команды:___
-   ```shell copycode
+2. **Master is launched second and enters the commands:**
+
+   ```shell
    > set mode master
    > set width 10
    > set height 10
@@ -132,23 +143,45 @@ Master: Enter commands (e.g. set mode master, set width 10, set height 10, set c
    > start
    ```
 
-3. ___Master расставляет собственные корабли (master_ships.txt), затем ждёт, пока Slave расставит свои (slave_ships.txt).___
+3. **Master places their own ships in `master_ships.txt`, then waits until Slave places their ships in `slave_ships.txt`.**
 
-4. ___Когда расстановка завершена, начинается фаза выстрелов:
-Master вводит shot X Y и сразу видит Master: You hit a Slave ship at (X, Y). или Master: You missed....
-При промахе ход переходит к Slave, и в терминале Slave появляется:___
-   ```arduino copycode
+4. **When ship placement is complete, the shooting phase begins.**
+
+   Master enters `shot X Y` and immediately sees a message such as:
+
+   ```text
+   Master: You hit a Slave ship at (X, Y).
+   ```
+
+   or:
+
+   ```text
+   Master: You missed.
+   ```
+
+   If Master misses, the turn passes to Slave, and the Slave terminal displays:
+
+   ```arduino
    [Slave] Now it's your turn.
    ```
 
-5. ___Slave делает выстрел командой shot X Y, получает ответ (You hit, You missed, и т. д.).___
-6. ___Как только все корабли одного из игроков будут уничтожены, игра выводит победителя (например, Master: All Slave ships have been sunk. Master wins!).___
-7. ___При желании можно ввести stop (прекращает игру, но остаётесь в приложении) или exit (полный выход).___
+5. **Slave makes a shot using the `shot X Y` command and receives a response, such as `You hit`, `You missed`, and so on.**
 
-## Служебные файлы
-В папке ../game_data/ (относительно исполняемых .exe) будут создаваться:
+6. **Once all ships of one player have been destroyed, the game displays the winner.**
 
-- **settings.txt** — настройки (ширина, высота, количество кораблей и т. д.).
-- **master_ships.txt** / **slave_ships.txt** — позиции кораблей Master/Slave.
-- **queue.txt** — хранит текущего игрока (1 или 2).
-- **shots.txt** — логи выстрелов.
+   Example:
+
+   ```text
+   Master: All Slave ships have been sunk. Master wins!
+   ```
+
+7. **If needed, the player can enter `stop` to stop the current game while staying in the application, or `exit` to exit completely.**
+
+## Auxiliary Files
+
+The following files will be created in the `../game_data/` directory relative to the executable `.exe` files:
+
+- **settings.txt** — stores settings such as width, height, number of ships, and so on.
+- **master_ships.txt** / **slave_ships.txt** — store the positions of Master’s and Slave’s ships.
+- **queue.txt** — stores the current player, either `1` or `2`.
+- **shots.txt** — stores shot logs.
